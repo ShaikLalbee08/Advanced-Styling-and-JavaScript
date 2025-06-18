@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Advanced Styling and JavaScript Demo</title>
+<style>
+  /* Base styles */
+  body {
+    font-family: Arial, sans-serif;
+    font-size: 18px;
+    margin: 20px;
+    background-color: #f9f9f9;
+    color: #333;
+  }
+
+  .container {
+    width: 70%;
+    margin: 0 auto;
+  }
+
+  h1 {
+    text-align: center;
+  }
+
+  /* Responsive styles */
+  @media (max-width: 768px) {
+    body {
+      font-size: 16px;
+    }
+    .container {
+      width: 90%;
+    }
+  }
+
+  @media (max-width: 480px) {
+    body {
+      font-size: 14px;
+    }
+    .container {
+      width: 100%;
+      margin: 10px;
+    }
+  }
+
+  /* Carousel styles */
+  .carousel {
+    width: 400px;
+    margin: 40px auto;
+    text-align: center;
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+  }
+  .carousel img {
+    width: 100%;
+    height: auto;
+    border-radius: 8px;
+  }
+  .carousel button {
+    margin: 10px 5px;
+    padding: 8px 16px;
+    font-size: 16px;
+    cursor: pointer;
+    border: none;
+    background-color: #007bff;
+    color: white;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+  }
+  .carousel button:hover {
+    background-color: #0056b3;
+  }
+
+  /* Joke container */
+  #joke-container {
+    width: 400px;
+    margin: 40px auto;
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    text-align: center;
+  }
+  #joke-container button {
+    margin-bottom: 20px;
+    padding: 10px 20px;
+    font-size: 18px;
+    cursor: pointer;
+    border: none;
+    background-color: #28a745;
+    color: white;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+  }
+  #joke-container button:hover {
+    background-color: #19692c;
+  }
+  #setup {
+    font-weight: bold;
+    font-size: 20px;
+    margin-bottom: 10px;
+  }
+  #punchline {
+    font-size: 18px;
+    color: #555;
+  }
+</style>
+</head>
+<body>
+
+<div class="container">
+  <h1>Responsive Image Carousel & Joke Fetcher</h1>
+
+  <!-- Image Carousel -->
+  <div class="carousel">
+    <img id="carousel-image" src="https://picsum.photos/id/237/400/300" alt="carousel image" />
+    <br />
+    <button id="prev-btn">Prev</button>
+    <button id="next-btn">Next</button>
+  </div>
+
+  <!-- Joke Fetcher -->
+  <div id="joke-container">
+    <button id="joke-btn">Get a Random Joke</button>
+    <p id="setup"></p>
+    <p id="punchline"></p>
+  </div>
+</div>
+
+<script>
+  // Image Carousel JS
+  const images = [
+    "https://picsum.photos/id/237/400/300",
+    "https://picsum.photos/id/238/400/300",
+    "https://picsum.photos/id/239/400/300",
+    "https://picsum.photos/id/240/400/300"
+  ];
+  let currentIndex = 0;
+
+  const imgElement = document.getElementById('carousel-image');
+  const prevBtn = document.getElementById('prev-btn');
+  const nextBtn = document.getElementById('next-btn');
+
+  prevBtn.addEventListener('click', () => {
+    currentIndex = (currentIndex - 1 + images.length) % images.length;
+    imgElement.src = images[currentIndex];
+  });
+
+  nextBtn.addEventListener('click', () => {
+    currentIndex = (currentIndex + 1) % images.length;
+    imgElement.src = images[currentIndex];
+  });
+
+  // Joke Fetcher JS
+  const jokeBtn = document.getElementById('joke-btn');
+  const setup = document.getElementById('setup');
+  const punchline = document.getElementById('punchline');
+
+  jokeBtn.addEventListener('click', () => {
+    setup.textContent = 'Loading joke...';
+    punchline.textContent = '';
+
+    fetch('https://official-joke-api.appspot.com/random_joke')
+      .then(response => response.json())
+      .then(data => {
+        setup.textContent = data.setup;
+        punchline.textContent = data.punchline;
+      })
+      .catch(error => {
+        setup.textContent = 'Oops! Something went wrong.';
+        punchline.textContent = '';
+        console.error(error);
+      });
+  });
+</script>
+
+</body>
+</html>
